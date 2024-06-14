@@ -1,5 +1,5 @@
-import { CarCard, CustomFilter, Hero, SearchBar } from "@/components"; // all comonents exported in index.ts
-import { manufacturers } from "@/constants";
+import { CarCard, CustomFilter, Hero, SearchBar, ShowMore } from "@/components"; // all comonents exported in index.ts
+import { fuels, manufacturers, yearsOfProduction } from "@/constants";
 import { HomeProps } from "@/types";
 import { fetchCars } from "@/utils";
 import Image from "next/image";
@@ -28,8 +28,11 @@ export default async function Home({ searchParams }: HomeProps) {
         <div className="home__filters">
           <SearchBar />
           <div className="home__filter-container">
-            <CustomFilter title="fuel"></CustomFilter>
-            <CustomFilter title="year"></CustomFilter>
+            <CustomFilter title="fuel" options={fuels}></CustomFilter>
+            <CustomFilter
+              title="year"
+              options={yearsOfProduction}
+            ></CustomFilter>
           </div>
         </div>
         {!isDataEmpty ? (
@@ -39,6 +42,10 @@ export default async function Home({ searchParams }: HomeProps) {
                 <CarCard car={car} />
               ))}
             </div>
+            <ShowMore
+              pageNumber={(searchParams.limit || 10) / 10}
+              isNext={(searchParams.limit || 10) > allCars.length}
+            />
           </section>
         ) : (
           <div className="home__error-container">
